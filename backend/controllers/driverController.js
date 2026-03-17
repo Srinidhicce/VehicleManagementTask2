@@ -22,13 +22,11 @@ exports.addDriver = async (req, res) => {
 
 exports.getDrivers = async (req, res) => {
   const drivers = await Driver.find({ isDeleted: false });
-
   res.json(drivers);
 
 };
 
 exports.updateDriver = async (req, res) => {
-
   try {
     const id = req.params.id;
     const driver = await Driver.findByIdAndUpdate(
@@ -59,7 +57,6 @@ exports.deleteDriver = async (req, res) => {
       counter.deletedDriversCount += 1;
       await counter.save();
     }
-
     res.json({ message: "Driver deleted" });
 
   } catch (error) {

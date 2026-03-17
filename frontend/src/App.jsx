@@ -1,31 +1,33 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { useState } from "react";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import Home from "./pages/Home";
-import AddDriver from "./pages/AddDriver";
-import DriverList from "./pages/DriverList";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  return (
-    <BrowserRouter>
+  const [page, setPage] = useState("login");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
-      <Routes>
+  function handleLoginSuccess(receivedToken) {
+    localStorage.setItem("token", receivedToken);
+    setToken(receivedToken);
+    setPage("dashboard");
+  }
 
-        <Route path="/" element={<Login />} />
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setToken("");
+    setPage("login");
+  }
 
-        <Route path="/signup" element={<Signup />} />
+  if (token && page !== "login" && page !== "signup") {
+    return <Dashboard token={token} onLogout={handleLogout} />;
+  }
 
-        <Route path="/home" element={<Home />} />
+  if (page === "signup") {
+    return <Signup onGoLogin={() => setPage("login")} />;
+  }
 
-        <Route path="/add-driver" element={<AddDriver />} />
-
-        <Route path="/drivers" element={<DriverList />} />
-
-      </Routes>
-
-    </BrowserRouter>
-  );
+  return <Login onLoginSuccess={handleLoginSuccess} onGoSignup={() => setPage("signup")} />;
 }
 
 export default App;

@@ -10,12 +10,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/uploads", express.static("uploads"));
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/drivers", require("./routes/driverRoutes"));
 app.get("/", (req, res) => {
   res.send("Driver Management API Running");
 });
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/drivers", require("./routes/driverRoutes"));
+app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 5000;
 
